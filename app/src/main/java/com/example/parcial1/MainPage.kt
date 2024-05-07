@@ -1,8 +1,6 @@
 package com.example.parcial1
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -13,13 +11,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.parcial1.ui.theme.Parcial1Theme
 
 @Composable
 fun MainPage(modifier: Modifier = Modifier) {
     Column(modifier.padding(horizontal = 30.dp)) {
         Text(
-            text = "¡Hola por favor, ingresa clave y contraseña!",
+            text = "Hola!",
             modifier = modifier.padding(vertical = 10.dp)
         )
         Row(modifier.padding()) {
@@ -34,7 +35,7 @@ fun MainPage(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
         )
         TextField(
-            value = "Contraseña", onValueChange = {}, modifier = modifier
+            value = "Clave", onValueChange = {}, modifier = modifier
                 .padding(top = 10.dp)
                 .fillMaxWidth()
         )
@@ -50,7 +51,6 @@ fun MainPage(modifier: Modifier = Modifier) {
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun MainPagePreview() {
