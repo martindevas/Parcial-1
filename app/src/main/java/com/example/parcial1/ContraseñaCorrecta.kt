@@ -4,8 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +30,7 @@ fun ContraseñaCorrecta(
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.welcome_image), // Asegúrate de tener una imagen en el directorio drawable
+            painter = painterResource(id = R.drawable.welcome_image),
             contentDescription = "Welcome Image",
             modifier = Modifier
                 .size(300.dp)

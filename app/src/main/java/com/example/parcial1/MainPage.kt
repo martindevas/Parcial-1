@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.example.parcial1
 
@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,9 +46,9 @@ fun MainNavHost(
     NavHost(
         modifier = modifier,
         navController = navHostController,
-        startDestination = "login"
+        startDestination = "ingreso"
     ) {
-        composable("login") {
+        composable("ingreso") {
             Ingreso(navHostController, modifier = modifier)
         }
         composable("home") {
@@ -58,10 +59,12 @@ fun MainNavHost(
     }
 }
 
-fun VerificacionUsuario(usuario: String, contraseña: String): Boolean {
+fun VerificacionUsuario(usuario: String, contraseña: String): Pair<Boolean, Boolean> {
     val usuarioAValidar = "pedro@pe.com.ar"
     val contraseñaAValidar = "abc123"
-    return usuario == usuarioAValidar && contraseña == contraseñaAValidar
+    val usuarioValido = usuario == usuarioAValidar
+    val contraseñaValida = contraseña == contraseñaAValidar
+    return Pair(usuarioValido, contraseñaValida)
 }
 
 @Composable
@@ -69,9 +72,10 @@ fun Ingreso(
     navHostController: NavHostController,
     modifier: Modifier = Modifier
 ){
-    val usuarioIngresado = remember { mutableStateOf("") }
+    val emailIngresado = remember { mutableStateOf("") }
     val contraseñaIngresada = remember { mutableStateOf("") }
-    val error = remember { mutableStateOf(false) }
+    val errorUsuario = remember { mutableStateOf(false) }
+    val errorContraseña = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -100,9 +104,12 @@ fun Ingreso(
                 modifier = Modifier.padding(vertical = 10.dp)
             )
             OutlinedTextField(
-                value = usuarioIngresado.value,
-                onValueChange = { usuarioIngresado.value = it },
-                label = { Text("Usuario") },
+                value = emailIngresado.value,
+                onValueChange = {
+                    emailIngresado.value = it
+                    errorUsuario.value = false // Reset error when user starts typing
+                },
+                label = { Text("Email") },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color(0xFFE0F7FA),
                     focusedBorderColor = Color(0xFF004D40),
@@ -114,8 +121,12 @@ fun Ingreso(
             )
             OutlinedTextField(
                 value = contraseñaIngresada.value,
-                onValueChange = { contraseñaIngresada.value = it },
+                onValueChange = {
+                    contraseñaIngresada.value = it
+                    errorContraseña.value = false // Reset error when user starts typing
+                },
                 label = { Text("Contraseña") },
+                visualTransformation = PasswordVisualTransformation(),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color(0xFFE0F7FA),
                     focusedBorderColor = Color(0xFF004D40),
@@ -127,13 +138,16 @@ fun Ingreso(
             )
             Button(
                 onClick = {
-                    val usuario = usuarioIngresado.value
+                    val usuario = emailIngresado.value
                     val contraseña = contraseñaIngresada.value
-                    if (VerificacionUsuario(usuario, contraseña)) {
-                        error.value = false
+                    val (usuarioValido, contraseñaValida) = VerificacionUsuario(usuario, contraseña)
+                    if (usuarioValido && contraseñaValida) {
+                        errorUsuario.value = false
+                        errorContraseña.value = false
                         navHostController.navigate("home")
                     } else {
-                        error.value = true
+                        errorUsuario.value = !usuarioValido
+                        errorContraseña.value = !contraseñaValida
                     }
                 },
                 modifier = Modifier
@@ -146,15 +160,26 @@ fun Ingreso(
             ) {
                 Text("Ingresar")
             }
-            if (error.value) {
+            if (errorUsuario.value && errorContraseña.value) {
                 Text(
-                    text = "Usuario o contraseña incorrectos!",
+                    text = "Usuario y contraseña incorrectos!",
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            } else if (errorUsuario.value) {
+                Text(
+                    text = "Email incorrecto!",
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            } else if (errorContraseña.value) {
+                Text(
+                    text = "Contraseña incorrecta!",
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun MainPagePreview() {
