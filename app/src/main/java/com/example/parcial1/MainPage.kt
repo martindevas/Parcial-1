@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.example.parcial1
 
@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -114,8 +113,8 @@ fun Ingreso(
                     .clip(RoundedCornerShape(8.dp))
             )
             OutlinedTextField(
-                value = usuarioIngresado.value,
-                onValueChange = { usuarioIngresado.value = it },
+                value = contraseñaIngresada.value,
+                onValueChange = { contraseñaIngresada.value = it },
                 label = { Text("Contraseña") },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color(0xFFE0F7FA),
@@ -150,7 +149,6 @@ fun Ingreso(
             if (error.value) {
                 Text(
                     text = "Usuario o contraseña incorrectos!",
-                    color = Color.Red,
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
